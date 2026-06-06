@@ -1,0 +1,108 @@
+name: Smart One-Click Helm Sync to GitHub Pages
+
+on:
+  workflow_dispatch:
+    inputs:
+      helm_command:
+        description: '直接粘贴整行命令 (例如: helm repo add kedacore https://kedacore.github.io/charts)'
+        required: true
+        default: 'helm repo add kedacore https://kedacore.github.io/charts'
+
+permissions:
+  contents: write
+
+jobs:
+  smart-sync-to-pages:
+    runs-on: ubuntu-latest
+    steps:
+      # 1. 签出代码
+      - name: Checkout gh-pages branch
+        uses: actions/checkout@v4
+        with:
+          ref: 'gh-pages'
+          fetch-depth: 0
+        continue-on-error: true
+
+      # 2. 确保本地有 docs 文件夹
+      - name: Init Directory
+        run: mkdir -p docs
+
+      # 3. 安装 Helm 环境
+      - name: Set up Helm
+        uses: azure/setup-helm@v4
+        with:
+          version: 'v3.12.0'
+
+      # 4. 解析并下载最新版 Chart 到 docs 目录
+      - name: Parse and Pull Latest Charts
+        id: pull_charts
+        run: |
+          CMD="${{ github.event.inputs.helm_command }}"
+          REPO_NAME=$(echo "$CMD" | awk '{print $4}')
+          REPO_URL=$(echo "$CMD" | awk '{print $5}')
+          
+          if [ -z "$REPO_NAME" ] || [ -z "$REPO_URL" ]; then
+            echo "❌ 解析失败，请确保格式为: helm repo add <名称> <URL>"
+            exit 1
+          fi
+          
+          helm repo add $REPO_NAME $REPO_URL
+          helm repo update
+          
+          echo "REPO_NAME=$REPO_NAME" >> $GITHUB_ENV
+          
+          echo "=== 开始自动抓取最新版本并下载 ==="
+          helm search repo $REPO_NAME/ --output json | jq -c '.[]' | while read -r line; do
+            CHART_FULL_NAME=$(echo "$line" | jq -r '.name')     
+            CHART_VERSION=$(echo "$line" | jq -r '.version')     
+            
+            helm pull $CHART_FULL_NAME --version $CHART_VERSION --destination ./docs
+          done
+
+      # 5. 更新 Helm 索引文件
+      - name: Update Helm Index
+        run: |
+          REPO_URL="https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}"
+          helm repo index docs --url $REPO_URL
+
+      # 6. 推送到 GitHub Pages 分支
+      - name: Deploy to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v4
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./docs
+          keep_files: true
+
+      # 7. ✨ 【更新】控制台直接输出安装与卸载命令
+      - name: 🚀 输出您专属的本地一键安装/卸载命令
+        run: |
+          USER_NAME="${{ github.repository_owner }}"
+          REPO_NAME_GIT="${{ github.event.repository.name }}"
+          
+          echo "========================================================================="
+          echo "🎉 同步成功！请在您的本地 Ubuntu 终端中【直接复制并执行】以下命令："
+          echo "========================================================================="
+          echo ""
+          echo "# 1. 添加您刚刚同步好的专属 Helm 仓库源"
+          echo "helm repo add my-helm https://${USER_NAME}.github.io/${REPO_NAME_GIT}/"
+          echo ""
+          echo "# 2. 更新本地索引以同步最新 Chart"
+          echo "helm repo update"
+          echo ""
+          echo "# 3. 查找您刚刚同步上来的所有 Chart 和可用版本"
+          echo "helm search repo my-helm/"
+          echo ""
+          echo "# 4. 【一键安装示例】（请将 <chart名称> 替换为实际查到的名字，如 keda）"
+          echo "helm install my-release my-helm/<chart名称> --namespace my-namespace --create-namespace"
+          echo ""
+          echo "-------------------------------------------------------------------------"
+          echo "🧹 如果后续需要清理和卸载，请执行以下命令："
+          echo "-------------------------------------------------------------------------"
+          echo ""
+          echo "# A. 卸载 Helm 部署的实例 (会自动删除关联的 Pod 和 Service)"
+          echo "helm uninstall my-release --namespace my-namespace"
+          echo ""
+          echo "# B. 【可选】彻底删除当初创建的 K8s 命名空间（谨慎操作，会删除该空间下所有资源）"
+          echo "kubectl delete namespace my-namespace"
+          echo ""
+          echo "========================================================================="
