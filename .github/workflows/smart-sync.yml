@@ -1,4 +1,4 @@
-name: Smart One-Click Helm Sync to GitHub Pages
+name: h1
 
 on:
   workflow_dispatch:
