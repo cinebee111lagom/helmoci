@@ -1,0 +1,119 @@
+name: Smart One-Click Helm Sync to GitHub Pages (Universal)
+
+on:
+  workflow_dispatch:
+    inputs:
+      helm_command:
+        description: '传统命令(如: helm repo add ...) 或 OCI链接(如: oci://quay.io/cilium/charts/cilium)'
+        required: true
+        default: 'helm repo add kedacore https://kedacore.github.io/charts'
+
+permissions:
+  contents: write
+
+jobs:
+  smart-sync-to-pages:
+    runs-on: ubuntu-latest
+    steps:
+      # 1. 签出代码
+      - name: Checkout gh-pages branch
+        uses: actions/checkout@v4
+        with:
+          ref: 'gh-pages'
+          fetch-depth: 0
+        continue-on-error: true
+
+      # 2. 确保本地有 docs 文件夹
+      - name: Init Directory
+        run: mkdir -p docs
+
+      # 3. 安装 Helm 环境
+      - name: Set up Helm
+        uses: azure/setup-helm@v4
+        with:
+          version: 'v3.12.0'
+
+      # 4. 解析并下载最新版 Chart 到 docs 目录
+      - name: Parse and Pull Latest Charts
+        run: |
+          INPUT_CMD="${{ github.event.inputs.helm_command }}"
+          echo "输入内容为: $INPUT_CMD"
+          
+          if [[ "$INPUT_CMD" == oci://* ]]; then
+            echo "==== 检测到 OCI 原生链接 ===="
+            OCI_URL="$INPUT_CMD"
+            CHART_SHORT_NAME=$(basename "$OCI_URL")
+            echo "正在从 OCI 仓库拉取最新版: $CHART_SHORT_NAME"
+            helm pull "$OCI_URL" --destination ./docs
+            
+          elif [[ "$INPUT_CMD" == *"repo add"* ]]; then
+            echo "==== 检测到传统 Helm Repo 命令 ===="
+            REPO_NAME=$(echo "$INPUT_CMD" | awk '{print $4}')
+            REPO_URL=$(echo "$INPUT_CMD" | awk '{print $5}')
+            
+            if [ -z "$REPO_NAME" ] || [ -z "$REPO_URL" ]; then
+              echo "❌ 解析失败，请确保格式为: helm repo add <名称> <URL>"
+              exit 1
+            fi
+            
+            helm repo add $REPO_NAME $REPO_URL
+            helm repo update
+            
+            helm search repo $REPO_NAME/ --output json | jq -c '.[]' | while read -r line; do
+              CHART_FULL_NAME=$(echo "$line" | jq -r '.name')     
+              CHART_VERSION=$(echo "$line" | jq -r '.version')     
+              echo "发现 Chart: $CHART_FULL_NAME | 最新版本: $CHART_VERSION"
+              helm pull $CHART_FULL_NAME --version $CHART_VERSION --destination ./docs
+            done
+          else
+            echo "❌ 无法识别的输入格式！"
+            exit 1
+          fi
+
+      # 5. 更新 Helm 索引文件
+      - name: Update Helm Index
+        run: |
+          REPO_URL="https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}"
+          helm repo index docs --url $REPO_URL
+
+      # 6. 推送到 GitHub Pages 分支
+      - name: Deploy to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v4
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./docs
+          keep_files: true
+
+      # 7. ✨【核心】在 GitHub Action 命令行日志里打出全套命令
+      - name: 🚀 输出您专属的本地一键安装/卸载命令
+        run: |
+          USER_NAME="${{ github.repository_owner }}"
+          REPO_NAME_GIT="${{ github.event.repository.name }}"
+          
+          echo "========================================================================="
+          echo "🎉 同步成功！请在您的本地 Ubuntu 终端中【直接复制并执行】以下命令："
+          echo "========================================================================="
+          echo ""
+          echo "👉 【第一步：添加并更新您的专属私有源】"
+          echo "helm repo remove my-helm 2>/dev/null || true"
+          echo "helm repo add my-helm https://${USER_NAME}.github.io/${REPO_NAME_GIT}/"
+          echo "helm repo update"
+          echo ""
+          echo "👉 【第二步：查看您刚刚转存成功的 Chart 列表】"
+          echo "helm search repo my-helm/"
+          echo ""
+          echo "👉 【第三步：一键安装命令示例】"
+          echo "# (请注意：把下面的 <chart名称> 换成你上一步查到的名字，比如 keda 或 cilium)"
+          echo "helm install my-release my-helm/<chart名称> --namespace my-namespace --create-namespace"
+          echo ""
+          echo "-------------------------------------------------------------------------"
+          echo "🧹 【如果您后续需要干净利退地卸载清理，请执行以下命令】"
+          echo "-------------------------------------------------------------------------"
+          echo ""
+          echo "# A. 标准卸载对应的 Helm 实例 (安全释放 Pod、Service 等资源)"
+          echo "helm uninstall my-release --namespace my-namespace"
+          echo ""
+          echo "# B. 强力抹除当初自动创建的 Kubernetes 命名空间"
+          echo "kubectl delete namespace my-namespace --grace-period=0 --force"
+          echo ""
+          echo "========================================================================="
