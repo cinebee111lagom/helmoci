@@ -3,7 +3,7 @@ entries:
   external-scaler-azure-cosmos-db:
   - apiVersion: v2
     appVersion: 0.1.0
-    created: "2026-06-06T15:07:12.845600935Z"
+    created: "2026-06-06T15:11:52.717352398Z"
     description: Event-based autoscaler for Azure Cosmos DB change feed consumer applications
     digest: a905dedb01db68575cf591eb0b8f6fa1aa1343f0ec239615081e4b57590d8ae9
     home: https://github.com/kedacore/external-scaler-azure-cosmos-db
@@ -24,7 +24,7 @@ entries:
   keda:
   - apiVersion: v2
     appVersion: 2.20.0
-    created: "2026-06-06T15:07:12.850772771Z"
+    created: "2026-06-06T15:11:52.722467858Z"
     description: Event-based autoscaler for workloads on Kubernetes
     digest: 551144e4f41f8662d6394b3c2b687781bd83c9c3a25429c7e9d70adec386ee85
     home: https://github.com/kedacore/keda
@@ -46,7 +46,7 @@ entries:
   keda-add-ons-http:
   - apiVersion: v2
     appVersion: 0.14.0
-    created: "2026-06-06T15:07:12.851931722Z"
+    created: "2026-06-06T15:11:52.723607698Z"
     description: Event-based autoscaler for HTTP workloads on Kubernetes
     digest: 80028cb5324065009d3cbe60376901f40cc2b6fb14796b431be97d5ec4b4aa57
     home: https://github.com/kedacore/http-add-on
@@ -65,4 +65,4 @@ entries:
     urls:
     - https://cinebee111lagom.github.io/helmoci/keda-add-ons-http-0.14.1.tgz
     version: 0.14.1
-generated: "2026-06-06T15:07:12.845172518Z"
+generated: "2026-06-06T15:11:52.71687766Z"
