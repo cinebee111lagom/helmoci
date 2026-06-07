@@ -28,20 +28,18 @@ jobs:
       - name: Set up Helm
         uses: azure/setup-helm@v4
         with:
-          version: 'v3.14.0' # 升级到较新版本以更好支持 OCI 规范
+          version: 'v3.14.0'
 
       - name: Parse, Pull and Extract Images
         run: |
-          set -e # 遇到严重错误立即停止
+          set -e
           
           INPUT_CMD="${{ github.event.inputs.helm_command }}"
           echo "==== 输入内容为: $INPUT_CMD ===="
           
-          # 定义【镜像提取函数】
           extract_images() {
             local tgz_file=$1
             echo "  🔍 分析依赖镜像 (默认配置):"
-            # 使用 helm template 渲染默认 YAML，并通过 awk 提取 image 字段
             local images=$(helm template dummy "$tgz_file" 2>/dev/null | awk '/image:/ {print $2}' | tr -d '"'\''' | sort -u)
             
             if [ -z "$images" ]; then
@@ -57,11 +55,9 @@ jobs:
           if [[ "$INPUT_CMD" == oci://* ]]; then
             echo "==== 🟢 检测到 OCI 原生链接 ===="
             OCI_URL="$INPUT_CMD"
-            
             echo "⬇️ 正在从 OCI 仓库拉取最新版..."
             helm pull "$OCI_URL" --destination ./docs
             
-            # 获取刚刚下载的最新 tgz 文件并提取镜像
             LATEST_TGZ=$(ls -t ./docs/*.tgz | head -n 1)
             extract_images "$LATEST_TGZ"
             
@@ -87,7 +83,6 @@ jobs:
               echo "---------------------------------------------------"
               echo "📦 发现 Chart: $CHART_FULL_NAME | 最新版本: $CHART_VERSION"
               
-              # 优化：增量检测，防止重复下载导致超时
               if [ -f "$EXPECTED_FILE" ]; then
                 echo "⚡ 本地已存在该版本，跳过拉取。"
               else
@@ -95,7 +90,6 @@ jobs:
                 helm pull $CHART_FULL_NAME --version $CHART_VERSION --destination ./docs
               fi
               
-              # 输出该 Chart 的镜像
               extract_images "$EXPECTED_FILE"
             done
           else
@@ -123,11 +117,29 @@ jobs:
           echo "========================================================================="
           echo "🎉 同步成功！您可以在 Action 的上一步 (Parse, Pull and Extract Images) 中"
           echo "    查看所有组件所需提取的 Docker 镜像列表，以便提前做镜像搬运。"
+          echo "    请在您的本地终端中【直接复制并执行】以下命令进行操作："
           echo "========================================================================="
           echo ""
-          echo "👉 【配置私有源】"
+          echo "👉 【第一步：添加并更新您的专属私有源】"
+          echo "helm repo remove my-helm 2>/dev/null || true"
           echo "helm repo add my-helm https://${USER_NAME}.github.io/${REPO_NAME_GIT}/"
           echo "helm repo update"
           echo ""
-          echo "👉 【安装示例】"
+          echo "👉 【第二步：查看您刚刚转存成功的 Chart 列表】"
+          echo "helm search repo my-helm/"
+          echo ""
+          echo "👉 【第三步：一键安装命令示例】"
+          echo "# (请注意：把下面的 <chart名称> 换成你上一步查到的名字，比如 keda 或 cilium)"
           echo "helm install my-release my-helm/<chart名称> --namespace my-namespace --create-namespace"
+          echo ""
+          echo "-------------------------------------------------------------------------"
+          echo "🧹 【如果您后续需要干净利退地卸载清理，请执行以下命令】"
+          echo "-------------------------------------------------------------------------"
+          echo ""
+          echo "# A. 标准卸载对应的 Helm 实例 (安全释放 Pod、Service 等资源)"
+          echo "helm uninstall my-release --namespace my-namespace"
+          echo ""
+          echo "# B. 强力抹除当初自动创建的 Kubernetes 命名空间"
+          echo "kubectl delete namespace my-namespace --grace-period=0 --force"
+          echo ""
+          echo "========================================================================="
