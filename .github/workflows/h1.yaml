@@ -1,4 +1,4 @@
-name: h1
+name: r1
 
 on:
   workflow_dispatch:
