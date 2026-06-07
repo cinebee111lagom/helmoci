@@ -1,0 +1,133 @@
+name: h1
+
+on:
+  workflow_dispatch:
+    inputs:
+      helm_command:
+        description: '传统命令(如: helm repo add ...) 或 OCI链接(如: oci://quay.io/cilium/charts/cilium)'
+        required: true
+        default: 'helm repo add kedacore https://kedacore.github.io/charts'
+
+permissions:
+  contents: write
+
+jobs:
+  smart-sync-to-pages:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout gh-pages branch
+        uses: actions/checkout@v4
+        with:
+          ref: 'gh-pages'
+          fetch-depth: 0
+        continue-on-error: true
+
+      - name: Init Directory
+        run: mkdir -p docs
+
+      - name: Set up Helm
+        uses: azure/setup-helm@v4
+        with:
+          version: 'v3.14.0' # 升级到较新版本以更好支持 OCI 规范
+
+      - name: Parse, Pull and Extract Images
+        run: |
+          set -e # 遇到严重错误立即停止
+          
+          INPUT_CMD="${{ github.event.inputs.helm_command }}"
+          echo "==== 输入内容为: $INPUT_CMD ===="
+          
+          # 定义【镜像提取函数】
+          extract_images() {
+            local tgz_file=$1
+            echo "  🔍 分析依赖镜像 (默认配置):"
+            # 使用 helm template 渲染默认 YAML，并通过 awk 提取 image 字段
+            local images=$(helm template dummy "$tgz_file" 2>/dev/null | awk '/image:/ {print $2}' | tr -d '"'\''' | sort -u)
+            
+            if [ -z "$images" ]; then
+              echo "    (未检测到明确的默认镜像，或被嵌套在复杂逻辑中)"
+            else
+              echo "$images" | while read -r img; do
+                echo "    - $img"
+              done
+            fi
+            echo ""
+          }
+          
+          if [[ "$INPUT_CMD" == oci://* ]]; then
+            echo "==== 🟢 检测到 OCI 原生链接 ===="
+            OCI_URL="$INPUT_CMD"
+            
+            echo "⬇️ 正在从 OCI 仓库拉取最新版..."
+            helm pull "$OCI_URL" --destination ./docs
+            
+            # 获取刚刚下载的最新 tgz 文件并提取镜像
+            LATEST_TGZ=$(ls -t ./docs/*.tgz | head -n 1)
+            extract_images "$LATEST_TGZ"
+            
+          elif [[ "$INPUT_CMD" == *"repo add"* ]]; then
+            echo "==== 🔵 检测到传统 Helm Repo 命令 ===="
+            REPO_NAME=$(echo "$INPUT_CMD" | awk '{print $4}')
+            REPO_URL=$(echo "$INPUT_CMD" | awk '{print $5}')
+            
+            if [ -z "$REPO_NAME" ] || [ -z "$REPO_URL" ]; then
+              echo "❌ 解析失败，请确保格式为: helm repo add <名称> <URL>"
+              exit 1
+            fi
+            
+            helm repo add $REPO_NAME $REPO_URL
+            helm repo update
+            
+            helm search repo $REPO_NAME/ --output json | jq -c '.[]' | while read -r line; do
+              CHART_FULL_NAME=$(echo "$line" | jq -r '.name')     
+              CHART_VERSION=$(echo "$line" | jq -r '.version')
+              SHORT_NAME=$(echo "$CHART_FULL_NAME" | cut -d'/' -f2)
+              EXPECTED_FILE="./docs/${SHORT_NAME}-${CHART_VERSION}.tgz"
+              
+              echo "---------------------------------------------------"
+              echo "📦 发现 Chart: $CHART_FULL_NAME | 最新版本: $CHART_VERSION"
+              
+              # 优化：增量检测，防止重复下载导致超时
+              if [ -f "$EXPECTED_FILE" ]; then
+                echo "⚡ 本地已存在该版本，跳过拉取。"
+              else
+                echo "⬇️ 正在拉取到本地..."
+                helm pull $CHART_FULL_NAME --version $CHART_VERSION --destination ./docs
+              fi
+              
+              # 输出该 Chart 的镜像
+              extract_images "$EXPECTED_FILE"
+            done
+          else
+            echo "❌ 无法识别的输入格式！"
+            exit 1
+          fi
+
+      - name: Update Helm Index
+        run: |
+          REPO_URL="https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}"
+          helm repo index docs --url $REPO_URL
+
+      - name: Deploy to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v4
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./docs
+          keep_files: true
+
+      - name: 🚀 输出您专属的本地一键安装/卸载命令
+        run: |
+          USER_NAME="${{ github.repository_owner }}"
+          REPO_NAME_GIT="${{ github.event.repository.name }}"
+          
+          echo "========================================================================="
+          echo "🎉 同步成功！您可以在 Action 的上一步 (Parse, Pull and Extract Images) 中"
+          echo "    查看所有组件所需提取的 Docker 镜像列表，以便提前做镜像搬运。"
+          echo "========================================================================="
+          echo ""
+          echo "👉 【配置私有源】"
+          echo "helm repo add my-helm https://${USER_NAME}.github.io/${REPO_NAME_GIT}/"
+          echo "helm repo update"
+          echo ""
+          echo "👉 【安装示例】"
+          echo "helm install my-release my-helm/<chart名称> --namespace my-namespace --create-namespace"
