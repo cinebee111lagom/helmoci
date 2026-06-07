@@ -1,47 +1,163 @@
 apiVersion: v1
 entries:
-  kuberay-apiserver:
-  - apiVersion: v2
-    created: "2026-06-07T09:44:27.400668047Z"
-    description: A Helm chart for kuberay-apiserver
-    digest: 954cb72cfdab95664d2e040c4d4eac5c7e88cbe0a302ec6e72d18adf6a60e140
-    name: kuberay-apiserver
-    type: application
-    urls:
-    - https://cinebee111lagom.github.io/helmoci/kuberay-apiserver-1.6.1.tgz
-    version: 1.6.1
-  kuberay-operator:
-  - apiVersion: v2
-    created: "2026-06-07T09:44:27.408547235Z"
-    description: A Helm chart for deploying the Kuberay operator on Kubernetes.
-    digest: 73847ee2e932e1931941a3618682c3e9884c110fce1446d7f56db1571153130a
-    home: https://github.com/ray-project/kuberay
-    icon: https://github.com/ray-project/ray/raw/master/doc/source/images/ray_header_logo.png
+  dragonfly:
+  - annotations:
+      artifacthub.io/changes: |
+        - Centralize health probe configuration into global readinessProbe and livenessProbe settings, and fix GRPC health probe timeout parameter format.
+      artifacthub.io/images: |
+        - name: manager
+          image: dragonflyoss/manager:2.4.4-rc.1
+        - name: scheduler
+          image: dragonflyoss/scheduler:v2.4.4-rc.1
+        - name: client
+          image: dragonflyoss/client:v1.3.8
+        - name: seed-client
+          image: dragonflyoss/client:v1.3.8
+        - name: dfinit
+          image: dragonflyoss/dfinit:v1.3.8
+        - name: injector
+          image: dragonflyoss/injector:v0.1.0
+      artifacthub.io/links: |
+        - name: Chart Source
+          url: https://github.com/dragonflyoss/helm-charts
+        - name: Source
+          url: https://github.com/dragonflyoss/dragonfly
+        - name: Source
+          url: https://github.com/dragonflyoss/client
+    apiVersion: v2
+    appVersion: 2.4.4-rc.1
+    created: "2026-06-07T10:28:44.804203731Z"
+    dependencies:
+    - condition: mysql.enable
+      name: mysql
+      repository: https://charts.bitnami.com/bitnami
+      version: 11.1.20
+    - condition: redis.enable
+      name: redis
+      repository: https://charts.bitnami.com/bitnami
+      version: 19.5.5
+    description: Dragonfly is an intelligent P2P based image and file distribution
+      system
+    digest: b6e3d96c0e2831385ab65e8b9fd7d47157a5d479d4377e97292a2149ab67c6e0
+    home: https://d7y.io/
+    icon: https://raw.githubusercontent.com/dragonflyoss/dragonfly/main/docs/images/logo/dragonfly.svg
     keywords:
-    - ray
-    - ray operator
-    - distributed computing
-    - data processing
-    - machine learning
-    - deep learning
-    - hyperparameter tuning
-    - reinforcement learning
-    - model serving
-    name: kuberay-operator
+    - dragonfly
+    - d7y
+    - P2P
+    - image
+    maintainers:
+    - email: gaius.qi@gmail.com
+      name: gaius-qi
+    - email: aiopsclub@163.com
+      name: yxxhero
+    - email: majinjing3@gmail.com
+      name: jim3ma
+    name: dragonfly
+    sources:
+    - https://github.com/dragonflyoss/dragonfly
+    - https://github.com/dragonflyoss/client
     type: application
     urls:
-    - https://cinebee111lagom.github.io/helmoci/kuberay-operator-1.6.1.tgz
-    version: 1.6.1
-  ray-cluster:
-  - apiVersion: v2
-    created: "2026-06-07T09:44:27.409253272Z"
-    description: A Helm chart for deploying the RayCluster with the kuberay operator.
-    digest: 8f5f39b1a75da196bcc9c9354b2041f70b21afcfed309121f59f21b924d81dc8
-    home: https://github.com/ray-project/kuberay
-    icon: https://github.com/ray-project/ray/raw/master/doc/source/images/ray_header_logo.png
-    name: ray-cluster
+    - https://cinebee111lagom.github.io/helmoci/dragonfly-1.6.27.tgz
+    version: 1.6.27
+  dragonfly-stack:
+  - annotations:
+      artifacthub.io/changes: |
+        - Rename repo Dragonfly2 to dragonfly.
+      artifacthub.io/links: |
+        - name: Chart Source
+          url: https://github.com/dragonflyoss/helm-charts
+        - name: Source
+          url: https://github.com/dragonflyoss/dragonfly
+        - name: Source
+          url: https://github.com/dragonflyoss/client
+        - name: Source
+          url: https://github.com/containerd/nydus-snapshotter
+    apiVersion: v2
+    appVersion: 2.1.49
+    created: "2026-06-07T10:28:44.819840158Z"
+    dependencies:
+    - condition: dragonfly.enable
+      name: dragonfly
+      repository: https://dragonflyoss.github.io/helm-charts/
+      version: 1.1.67
+    - condition: nydus-snapshotter.enable
+      name: nydus-snapshotter
+      repository: https://dragonflyoss.github.io/helm-charts/
+      version: 0.0.10
+    description: Collects Dragonfly component and Nydus component into a single chart
+      to provide a complete solution for the Dragonfly stack.
+    digest: 0ffd71c422d1d12152db76dd9949e9f47ac64fd257e1dcfba0c88a821cd46914
+    home: https://d7y.io/
+    icon: https://raw.githubusercontent.com/dragonflyoss/dragonfly/main/docs/images/logo/dragonfly.svg
+    keywords:
+    - dragonfly-stack
+    - dragonfly
+    - nydus
+    - d7y
+    - P2P
+    - image
+    maintainers:
+    - email: gaius.qi@gmail.com
+      name: gaius-qi
+    - email: imeoer@gmail.com
+      name: imeoer
+    - email: adamqqq@163.com
+      name: adamqqqplay
+    name: dragonfly-stack
+    sources:
+    - https://github.com/dragonflyoss/dragonfly
+    - https://github.com/dragonflyoss/client
+    - https://github.com/dragonflyoss/image-service
+    - https://github.com/containerd/nydus-snapshotter/
     type: application
     urls:
-    - https://cinebee111lagom.github.io/helmoci/ray-cluster-1.6.1.tgz
-    version: 1.6.1
-generated: "2026-06-07T09:44:27.400073053Z"
+    - https://cinebee111lagom.github.io/helmoci/dragonfly-stack-0.1.2.tgz
+    version: 0.1.2
+  nydus-snapshotter:
+  - annotations:
+      artifacthub.io/changes: |
+        -  Change default port of the Dragonfly.
+      artifacthub.io/images: |
+        - name: nydus-snapshotter
+          image: ghcr.io/nydus-snapshotter/nydus-snapshotter:latest
+      artifacthub.io/links: |
+        - name: Chart Source
+          url: https://github.com/dragonflyoss/helm-charts
+        - name: Source
+          url: https://github.com/containerd/nydus-snapshotter
+    apiVersion: v2
+    appVersion: 0.9.0
+    created: "2026-06-07T10:28:44.820336584Z"
+    description: Nydus snapshotter is an external plugin of containerd for Nydus image
+      service which implements a chunk-based content-addressable filesystem on top
+      of a called RAFS.
+    digest: 82a681c8eecb39097262f22c613f52f360b0d51b6e109363455183f1508aaeb0
+    home: https://nydus.dev/
+    icon: https://github.com/dragonflyoss/image-service/raw/master/misc/logo.svg
+    keywords:
+    - nydus
+    - nydus-snapshotter
+    - dragonfly
+    - d7y
+    - P2P
+    - image
+    maintainers:
+    - email: adamqqq@163.com
+      name: adamqqqplay
+    - email: imeoer@gmail.com
+      name: imeoer
+    - email: lb203159@antgroup.com
+      name: liubin
+    - email: gaius.qi@gmail.com
+      name: gaius-qi
+    name: nydus-snapshotter
+    sources:
+    - https://github.com/dragonflyoss/image-service
+    - https://github.com/containerd/nydus-snapshotter/
+    type: application
+    urls:
+    - https://cinebee111lagom.github.io/helmoci/nydus-snapshotter-0.0.10.tgz
+    version: 0.0.10
+generated: "2026-06-07T10:28:44.790836622Z"
