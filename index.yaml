@@ -3,7 +3,7 @@ entries:
   volcano:
   - apiVersion: v2
     appVersion: 1.15.0
-    created: "2026-06-07T15:45:23.005339896Z"
+    created: "2026-06-07T15:49:29.616056261Z"
     dependencies:
     - name: jobflow
       repository: file://./charts/jobflow
@@ -23,4 +23,4 @@ entries:
     urls:
     - https://cinebee111lagom.github.io/helmoci/volcano-1.15.0.tgz
     version: 1.15.0
-generated: "2026-06-07T15:45:22.999012739Z"
+generated: "2026-06-07T15:49:29.610341869Z"
