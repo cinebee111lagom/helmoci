@@ -1,26 +1,21 @@
 apiVersion: v1
 entries:
-  volcano:
+  hermes-operator:
   - apiVersion: v2
-    appVersion: 1.15.0
-    created: "2026-06-07T15:49:29.616056261Z"
-    dependencies:
-    - name: jobflow
-      repository: file://./charts/jobflow
-      version: 1.0.0
-    description: A Helm chart for Volcano
-    digest: 2dd37565917a9b9929385ab4d1f6561cb04d104a993285dab266df1d6644bb3b
-    home: https://volcano.sh
-    icon: https://raw.githubusercontent.com/volcano-sh/charts/master/docs/images/volcano-logo.png
+    appVersion: v0.1.13
+    created: "2026-06-09T16:03:51.691942995Z"
+    description: Kubernetes operator for nousresearch/hermes-agent
+    digest: 7cab88cee84b895e80ce7120067706e1394191d68cf3249200b11cd6cb06700f
+    home: https://github.com/paperclipinc/hermes-operator
+    kubeVersion: '>=1.28.0-0'
     maintainers:
-    - email: klaus1982.cn@gmail.com
-      name: k82cn
-    - email: kevinwzf0126@gmail.com
-      name: kevin-wangzefeng
-    name: volcano
+    - email: jannes@paperclip.inc
+      name: paperclipinc
+    name: hermes-operator
     sources:
-    - https://github.com/volcano-sh/volcano
+    - https://github.com/paperclipinc/hermes-operator
+    type: application
     urls:
-    - https://cinebee111lagom.github.io/helmoci/volcano-1.15.0.tgz
-    version: 1.15.0
-generated: "2026-06-07T15:49:29.610341869Z"
+    - https://cinebee111lagom.github.io/helmoci/hermes-operator-0.1.13.tgz
+    version: 0.1.13
+generated: "2026-06-09T16:03:51.688936936Z"
