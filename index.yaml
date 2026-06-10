@@ -3,7 +3,7 @@ entries:
   alloy:
   - apiVersion: v2
     appVersion: v1.16.3
-    created: "2026-06-10T15:26:40.735940032Z"
+    created: "2026-06-10T15:50:35.603461779Z"
     dependencies:
     - condition: crds.create
       name: crds
@@ -20,7 +20,7 @@ entries:
   alloy-crd:
   - apiVersion: v2
     appVersion: 1.0.0
-    created: "2026-06-10T15:26:40.736106544Z"
+    created: "2026-06-10T15:50:35.603636662Z"
     description: A Helm chart the Alloy CustomResourceDefinition, allowing for discrete
       deployments of the Alloy CRD independently of the Alloy Operator.
     digest: 0c847b48aecc460616df586972532a8b973116811af504ee5ab8bc7d0bf06090
@@ -38,7 +38,7 @@ entries:
   alloy-operator:
   - apiVersion: v2
     appVersion: 1.8.2
-    created: "2026-06-10T15:26:40.737112916Z"
+    created: "2026-06-10T15:50:35.60463181Z"
     dependencies:
     - condition: crds.deployAlloyCRD
       name: alloy-crd
@@ -65,7 +65,7 @@ entries:
   beyla:
   - apiVersion: v2
     appVersion: 3.20.0
-    created: "2026-06-10T15:26:40.738002181Z"
+    created: "2026-06-10T15:50:35.605537832Z"
     description: eBPF-based autoinstrumentation HTTP, HTTP2 and gRPC services, as
       well as network metrics.
     digest: 5181924f3311036708209e0e0e5ad892b74603e2e7be43fa1e080a655b265b66
@@ -96,7 +96,7 @@ entries:
   cloudcost-exporter:
   - apiVersion: v2
     appVersion: 1.2.2
-    created: "2026-06-10T15:26:40.738317217Z"
+    created: "2026-06-10T15:50:35.605859767Z"
     description: Cloud Cost Exporter exports cloud provider agnostic cost metrics
       to Prometheus.
     digest: 9b724fa2b137b15126484403ec3ce8fac32cc38f2323ba2c7b2377818cc25346
@@ -109,7 +109,7 @@ entries:
   enterprise-logs:
   - apiVersion: v2
     appVersion: v1.5.2
-    created: "2026-06-10T15:26:40.744977876Z"
+    created: "2026-06-10T15:50:35.612275238Z"
     dependencies:
     - name: loki-distributed
       repository: https://grafana.github.io/helm-charts
@@ -132,7 +132,7 @@ entries:
   enterprise-logs-simple:
   - apiVersion: v2
     appVersion: v1.4.0
-    created: "2026-06-10T15:26:40.748323526Z"
+    created: "2026-06-10T15:50:35.616378756Z"
     dependencies:
     - name: loki-simple-scalable
       repository: https://grafana.github.io/helm-charts
@@ -155,7 +155,7 @@ entries:
   enterprise-metrics:
   - apiVersion: v2
     appVersion: v1.7.0
-    created: "2026-06-10T15:26:40.754753545Z"
+    created: "2026-06-10T15:50:35.621990297Z"
     dependencies:
     - alias: memcached
       condition: memcached.enabled
@@ -190,7 +190,7 @@ entries:
   fluent-bit:
   - apiVersion: v1
     appVersion: v2.1.0
-    created: "2026-06-10T15:26:40.755342716Z"
+    created: "2026-06-10T15:50:35.622573014Z"
     deprecated: true
     description: Uses fluent-bit Loki go plugin for gathering logs and sending them
       to Loki
@@ -217,7 +217,7 @@ entries:
           url: https://github.com/grafana/grafana
     apiVersion: v2
     appVersion: 12.3.1
-    created: "2026-06-10T15:26:40.758469695Z"
+    created: "2026-06-10T15:50:35.626151062Z"
     deprecated: true
     description: The leading tool for querying and visualizing time series and metrics.
     digest: c08c87969270402e7d5227edb8385af67cc32ee34817bff89773ad02303b5d79
@@ -253,7 +253,7 @@ entries:
   grafana-agent:
   - apiVersion: v2
     appVersion: v0.44.2
-    created: "2026-06-10T15:26:40.759769231Z"
+    created: "2026-06-10T15:50:35.627404808Z"
     dependencies:
     - condition: crds.create
       name: crds
@@ -269,7 +269,7 @@ entries:
   grafana-agent-operator:
   - apiVersion: v2
     appVersion: 0.44.2
-    created: "2026-06-10T15:26:40.761046863Z"
+    created: "2026-06-10T15:50:35.628220465Z"
     deprecated: true
     description: A Helm chart for Grafana Agent Operator
     digest: 3d67425255fab29f451a978a86728ffcbe9b2eb4730db79be95bbab333167221
@@ -288,7 +288,7 @@ entries:
   grafana-cloud-onboarding:
   - apiVersion: v2
     appVersion: 1.16.0
-    created: "2026-06-10T15:26:40.768217348Z"
+    created: "2026-06-10T15:50:35.635018762Z"
     dependencies:
     - condition: alloy-operator.enabled
       name: alloy-operator
@@ -330,7 +330,7 @@ entries:
           url: https://github.com/grafana/mcp-grafana
     apiVersion: v2
     appVersion: 0.8.2
-    created: "2026-06-10T15:26:40.768875323Z"
+    created: "2026-06-10T15:50:35.635657934Z"
     deprecated: true
     description: MCP server for Grafana.
     digest: c525d05d6fb145dc7fe060aade10f17e67ce74809f4b30a5931ee859feefc896
@@ -360,7 +360,7 @@ entries:
   grafana-operator:
   - apiVersion: v2
     appVersion: v5.24.0
-    created: "2026-06-10T15:26:40.774371485Z"
+    created: "2026-06-10T15:50:35.641770299Z"
     dependencies:
     - condition: crds.immutable
       name: crds
@@ -376,7 +376,7 @@ entries:
   grafana-sampling:
   - apiVersion: v2
     appVersion: v1.11.3
-    created: "2026-06-10T15:26:40.780123549Z"
+    created: "2026-06-10T15:50:35.646885544Z"
     dependencies:
     - alias: alloy-deployment
       name: alloy
@@ -400,7 +400,7 @@ entries:
   k6-operator:
   - apiVersion: v1
     appVersion: 1.4.0
-    created: "2026-06-10T15:26:40.781254199Z"
+    created: "2026-06-10T15:50:35.64802652Z"
     description: A Helm chart to install the k6-operator
     digest: b46331e5dd5ff6969c2ce36343c666220fd9cd7be246dd914f7868d1c90fab76
     home: https://k6.io
@@ -425,7 +425,7 @@ entries:
   k8s-manifest-tail:
   - apiVersion: v2
     appVersion: 0.1.1
-    created: "2026-06-10T15:26:40.781687394Z"
+    created: "2026-06-10T15:50:35.648440313Z"
     description: Fetches and monitors Kubernetes manifests from a running cluster
     digest: 9fa9cf128ad3cd1265c10157307380925f547d70de5313f2f0599e7b61e2b06a
     name: k8s-manifest-tail
@@ -436,7 +436,7 @@ entries:
   k8s-monitoring:
   - apiVersion: v2
     appVersion: 4.1.4
-    created: "2026-06-10T15:26:40.803971071Z"
+    created: "2026-06-10T15:50:35.670605517Z"
     dependencies:
     - alias: annotationAutodiscovery
       condition: annotationAutodiscovery.enabled
@@ -563,7 +563,7 @@ entries:
           url: https://github.com/grafana/oncall
     apiVersion: v2
     appVersion: ^12.1.1
-    created: "2026-06-10T15:26:40.866281197Z"
+    created: "2026-06-10T15:50:35.731421597Z"
     dependencies:
     - alias: grafana
       condition: grafana.enabled
@@ -616,7 +616,7 @@ entries:
   loki:
   - apiVersion: v2
     appVersion: 3.6.7
-    created: "2026-06-10T15:26:40.878998761Z"
+    created: "2026-06-10T15:50:35.74539686Z"
     dependencies:
     - alias: minio
       condition: minio.enabled
@@ -653,7 +653,7 @@ entries:
   loki-canary:
   - apiVersion: v2
     appVersion: 2.9.1
-    created: "2026-06-10T15:26:40.879595954Z"
+    created: "2026-06-10T15:50:35.745846497Z"
     deprecated: true
     description: Helm chart for Grafana Loki Canary
     digest: c0d30b910b6be36223d4015f91e80759e9cf851ebab1d81ca1c9ae546e670ce9
@@ -673,7 +673,7 @@ entries:
   loki-distributed:
   - apiVersion: v2
     appVersion: 2.9.13
-    created: "2026-06-10T15:26:40.886733208Z"
+    created: "2026-06-10T15:50:35.751072259Z"
     deprecated: true
     description: Helm chart for Grafana Loki in microservices mode
     digest: 39931c41a20370434a7efc96ba24c4ec943127bbe69694a8f8d630bea7a71d46
@@ -693,7 +693,7 @@ entries:
   loki-simple-scalable:
   - apiVersion: v2
     appVersion: 2.6.1
-    created: "2026-06-10T15:26:40.895687225Z"
+    created: "2026-06-10T15:50:35.759775431Z"
     dependencies:
     - alias: minio
       condition: minio.enabled
@@ -723,7 +723,7 @@ entries:
   loki-stack:
   - apiVersion: v1
     appVersion: v2.9.3
-    created: "2026-06-10T15:26:40.909822824Z"
+    created: "2026-06-10T15:50:35.775393466Z"
     dependencies:
     - condition: loki.enabled
       name: loki
@@ -771,7 +771,7 @@ entries:
   meta-monitoring:
   - apiVersion: v2
     appVersion: 0.0.1
-    created: "2026-06-10T15:26:40.956142001Z"
+    created: "2026-06-10T15:50:35.819977406Z"
     dependencies:
     - condition: local.logs.enabled
       name: loki
@@ -802,7 +802,7 @@ entries:
   mimir-distributed:
   - apiVersion: v2
     appVersion: 3.0.4
-    created: "2026-06-10T15:26:40.973562502Z"
+    created: "2026-06-10T15:50:35.838708024Z"
     dependencies:
     - alias: minio
       condition: minio.enabled
@@ -831,7 +831,7 @@ entries:
   mimir-openshift-experimental:
   - apiVersion: v2
     appVersion: 2.0.0
-    created: "2026-06-10T15:26:40.980080049Z"
+    created: "2026-06-10T15:50:35.844988472Z"
     dependencies:
     - alias: memcached
       condition: memcached.enabled
@@ -865,7 +865,7 @@ entries:
   oncall:
   - apiVersion: v2
     appVersion: v1.16.5
-    created: "2026-06-10T15:26:41.010619982Z"
+    created: "2026-06-10T15:50:35.875398264Z"
     dependencies:
     - condition: cert-manager.enabled
       name: cert-manager
@@ -909,7 +909,7 @@ entries:
   pdc-agent:
   - apiVersion: v2
     appVersion: 0.0.57
-    created: "2026-06-10T15:26:41.011051024Z"
+    created: "2026-06-10T15:50:35.87584078Z"
     description: PDC agent is an agent for connecting to Grafana Private Data source
       Connect
     digest: 2303a5f35b28e3e59fd3b709f1cb28b6796259087e527f1c90211ea58d7b8045
@@ -924,7 +924,7 @@ entries:
   phlare:
   - apiVersion: v2
     appVersion: 0.5.1
-    created: "2026-06-10T15:26:41.013648823Z"
+    created: "2026-06-10T15:50:35.878385298Z"
     dependencies:
     - alias: minio
       condition: minio.enabled
@@ -942,7 +942,7 @@ entries:
   promtail:
   - apiVersion: v2
     appVersion: 3.5.1
-    created: "2026-06-10T15:26:41.015344157Z"
+    created: "2026-06-10T15:50:35.87982922Z"
     deprecated: true
     description: Promtail is an agent which ships the contents of local logs to a
       Loki instance
@@ -965,7 +965,7 @@ entries:
   pyroscope:
   - apiVersion: v2
     appVersion: 2.0.3
-    created: "2026-06-10T15:26:41.022530755Z"
+    created: "2026-06-10T15:50:35.889631531Z"
     dependencies:
     - alias: agent
       condition: agent.enabled
@@ -997,7 +997,7 @@ entries:
   pyroscope-monitoring:
   - apiVersion: v2
     appVersion: 0.0.0
-    created: "2026-06-10T15:26:41.063832089Z"
+    created: "2026-06-10T15:50:35.931544158Z"
     dependencies:
     - alias: monitoring
       condition: monitoring.enabled
@@ -1015,7 +1015,7 @@ entries:
   rollout-operator:
   - apiVersion: v2
     appVersion: v0.38.0
-    created: "2026-06-10T15:26:41.064695825Z"
+    created: "2026-06-10T15:50:35.932360025Z"
     dependencies:
     - condition: crds.enabled
       name: crds
@@ -1033,7 +1033,7 @@ entries:
   snyk-exporter:
   - apiVersion: v2
     appVersion: v1.4.1
-    created: "2026-06-10T15:26:41.065131734Z"
+    created: "2026-06-10T15:50:35.932809061Z"
     description: Prometheus exporter for Snyk.
     digest: 13bf321237af9d0d8c2203726a387f2602a2557a0fbc39c500da5e619929f298
     home: https://github.com/grafana/snyk_exporter
@@ -1048,7 +1048,7 @@ entries:
   synthetic-monitoring-agent:
   - apiVersion: v2
     appVersion: v0.38.3
-    created: "2026-06-10T15:26:41.065735698Z"
+    created: "2026-06-10T15:50:35.933479429Z"
     deprecated: true
     description: 'Grafana''s Synthetic Monitoring application. The agent provides
       probe functionality and executes network checks for monitoring remote targets.  >
@@ -1076,7 +1076,7 @@ entries:
   tempo:
   - apiVersion: v2
     appVersion: 2.9.0
-    created: "2026-06-10T15:26:41.068024064Z"
+    created: "2026-06-10T15:50:35.934610951Z"
     deprecated: true
     description: Grafana Tempo Single Binary Mode
     digest: f1f6e318d5bca3b5097cb676077796cdf8135beb2c1f71c4d14614ccf9b0081b
@@ -1103,7 +1103,7 @@ entries:
   tempo-distributed:
   - apiVersion: v2
     appVersion: 2.9.0
-    created: "2026-06-10T15:26:41.083895622Z"
+    created: "2026-06-10T15:50:35.943977332Z"
     dependencies:
     - alias: minio
       condition: minio.enabled
@@ -1150,7 +1150,7 @@ entries:
   tempo-vulture:
   - apiVersion: v2
     appVersion: 2.9.0
-    created: "2026-06-10T15:26:41.084337421Z"
+    created: "2026-06-10T15:50:35.944431385Z"
     deprecated: true
     description: Grafana Tempo Vulture - A tool to monitor Tempo performance.
     digest: 5cbd3d12d189fd0bc3bec58dcf8d62de256c72ddd2ba44554b1892b283959a08
@@ -1166,4 +1166,4 @@ entries:
     urls:
     - https://cinebee111lagom.github.io/helmoci/tempo-vulture-0.10.1.tgz
     version: 0.10.1
-generated: "2026-06-10T15:26:40.733748778Z"
+generated: "2026-06-10T15:50:35.601259256Z"
