@@ -1,133 +1,47 @@
 apiVersion: v1
 entries:
-  ambient:
+  kuberay-apiserver:
   - apiVersion: v2
-    appVersion: 1.30.1
-    created: "2026-06-10T16:24:13.014255002Z"
-    dependencies:
-    - name: base
-      repository: file://../../charts/base
-      version: 1.30.1
-    - name: cni
-      repository: file://../../charts/istio-cni
-      version: 1.30.1
-    - condition: istiod.enabled
-      name: istiod
-      repository: file://../../charts/istio-control/istio-discovery
-      version: 1.30.1
-    - name: ztunnel
-      repository: file://../../charts/ztunnel
-      version: 1.30.1
-    description: Helm umbrella chart for ambient
-    digest: 269ed1d1b95906bc0c79cc1786ac076925aca3adba94052dd0546b4931d8c634
-    icon: https://istio.io/latest/favicons/android-192x192.png
-    keywords:
-    - istio-cni
-    - istio
-    - ambient
-    kubeVersion: '>= 1.23.0-0'
-    name: ambient
-    sources:
-    - https://github.com/istio/istio
+    created: "2026-06-11T10:40:43.359563309Z"
+    description: A Helm chart for kuberay-apiserver
+    digest: 954cb72cfdab95664d2e040c4d4eac5c7e88cbe0a302ec6e72d18adf6a60e140
+    name: kuberay-apiserver
     type: application
     urls:
-    - https://cinebee111lagom.github.io/helmoci/ambient-1.30.1.tgz
-    version: 1.30.1
-  base:
+    - https://cinebee111lagom.github.io/helmoci/kuberay-apiserver-1.6.1.tgz
+    version: 1.6.1
+  kuberay-operator:
   - apiVersion: v2
-    appVersion: 1.30.1
-    created: "2026-06-10T16:24:13.016515649Z"
-    description: Helm chart for deploying Istio cluster resources and CRDs
-    digest: 53ce385d4c79f85a78710bc03d5fe6858cf52e4b9511ca512096d9961aa49b90
-    icon: https://istio.io/latest/favicons/android-192x192.png
+    created: "2026-06-11T10:40:43.366827821Z"
+    description: A Helm chart for deploying the Kuberay operator on Kubernetes.
+    digest: 73847ee2e932e1931941a3618682c3e9884c110fce1446d7f56db1571153130a
+    home: https://github.com/ray-project/kuberay
+    icon: https://github.com/ray-project/ray/raw/master/doc/source/images/ray_header_logo.png
     keywords:
-    - istio
-    name: base
-    sources:
-    - https://github.com/istio/istio
-    urls:
-    - https://cinebee111lagom.github.io/helmoci/base-1.30.1.tgz
-    version: 1.30.1
-  cni:
-  - apiVersion: v2
-    appVersion: 1.30.1
-    created: "2026-06-10T16:24:13.017186156Z"
-    description: Helm chart for istio-cni components
-    digest: baf6d99b0af23f9436ae30bf88213c576278da228c144037d85b86f5368b34f1
-    icon: https://istio.io/latest/favicons/android-192x192.png
-    keywords:
-    - istio-cni
-    - istio
-    name: cni
-    sources:
-    - https://github.com/istio/istio
-    urls:
-    - https://cinebee111lagom.github.io/helmoci/cni-1.30.1.tgz
-    version: 1.30.1
-  gateway:
-  - apiVersion: v2
-    appVersion: 1.30.1
-    created: "2026-06-10T16:24:13.017798865Z"
-    description: Helm chart for deploying Istio gateways
-    digest: 3c7c13d1221f2e1fa68597baf385874d3fc2219e80bb4ab61319160af894d490
-    icon: https://istio.io/latest/favicons/android-192x192.png
-    keywords:
-    - istio
-    - gateways
-    name: gateway
-    sources:
-    - https://github.com/istio/istio
+    - ray
+    - ray operator
+    - distributed computing
+    - data processing
+    - machine learning
+    - deep learning
+    - hyperparameter tuning
+    - reinforcement learning
+    - model serving
+    name: kuberay-operator
     type: application
     urls:
-    - https://cinebee111lagom.github.io/helmoci/gateway-1.30.1.tgz
-    version: 1.30.1
-  istiod:
+    - https://cinebee111lagom.github.io/helmoci/kuberay-operator-1.6.1.tgz
+    version: 1.6.1
+  ray-cluster:
   - apiVersion: v2
-    appVersion: 1.30.1
-    created: "2026-06-10T16:24:13.01960776Z"
-    description: Helm chart for istio control plane
-    digest: 20000d94855abb9e7b5ec02354ed768889ec5a1905b1573aa334dd3d135ce39a
-    icon: https://istio.io/latest/favicons/android-192x192.png
-    keywords:
-    - istio
-    - istiod
-    - istio-discovery
-    name: istiod
-    sources:
-    - https://github.com/istio/istio
+    created: "2026-06-11T10:40:43.367526108Z"
+    description: A Helm chart for deploying the RayCluster with the kuberay operator.
+    digest: 8f5f39b1a75da196bcc9c9354b2041f70b21afcfed309121f59f21b924d81dc8
+    home: https://github.com/ray-project/kuberay
+    icon: https://github.com/ray-project/ray/raw/master/doc/source/images/ray_header_logo.png
+    name: ray-cluster
+    type: application
     urls:
-    - https://cinebee111lagom.github.io/helmoci/istiod-1.30.1.tgz
-    version: 1.30.1
-  istiod-remote:
-  - apiVersion: v2
-    appVersion: 1.23.6
-    created: "2026-06-10T16:24:13.021957852Z"
-    description: Helm chart for a remote cluster using an external istio control plane
-    digest: 9af64204b9629c5fbdbeaab6ddd99e337805fd9feb94868c8f10e554bff519b1
-    icon: https://istio.io/latest/favicons/android-192x192.png
-    keywords:
-    - istio
-    - external-istiod
-    name: istiod-remote
-    sources:
-    - https://github.com/istio/istio
-    urls:
-    - https://cinebee111lagom.github.io/helmoci/istiod-remote-1.23.6.tgz
-    version: 1.23.6
-  ztunnel:
-  - apiVersion: v2
-    appVersion: 1.30.1
-    created: "2026-06-10T16:24:13.022438433Z"
-    description: Helm chart for istio ztunnel components
-    digest: 912f07b7dec27c2da8f484e074e618faf8f810383ec6c67dd5a9c7246dcf2bc9
-    icon: https://istio.io/latest/favicons/android-192x192.png
-    keywords:
-    - istio-ztunnel
-    - istio
-    name: ztunnel
-    sources:
-    - https://github.com/istio/istio
-    urls:
-    - https://cinebee111lagom.github.io/helmoci/ztunnel-1.30.1.tgz
-    version: 1.30.1
-generated: "2026-06-10T16:24:13.009258853Z"
+    - https://cinebee111lagom.github.io/helmoci/ray-cluster-1.6.1.tgz
+    version: 1.6.1
+generated: "2026-06-11T10:40:43.358972503Z"
