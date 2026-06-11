@@ -1,47 +1,57 @@
 apiVersion: v1
 entries:
-  kuberay-apiserver:
-  - apiVersion: v2
-    created: "2026-06-11T10:40:43.359563309Z"
-    description: A Helm chart for kuberay-apiserver
-    digest: 954cb72cfdab95664d2e040c4d4eac5c7e88cbe0a302ec6e72d18adf6a60e140
-    name: kuberay-apiserver
-    type: application
-    urls:
-    - https://cinebee111lagom.github.io/helmoci/kuberay-apiserver-1.6.1.tgz
-    version: 1.6.1
-  kuberay-operator:
-  - apiVersion: v2
-    created: "2026-06-11T10:40:43.366827821Z"
-    description: A Helm chart for deploying the Kuberay operator on Kubernetes.
-    digest: 73847ee2e932e1931941a3618682c3e9884c110fce1446d7f56db1571153130a
-    home: https://github.com/ray-project/kuberay
-    icon: https://github.com/ray-project/ray/raw/master/doc/source/images/ray_header_logo.png
+  redis:
+  - annotations:
+      artifacthub.io/category: database
+      artifacthub.io/changes: |-
+        - kind: changed
+          description: '[redis] Fix appVersion set to `v8.8.8` instead of `v8.8.0` (#1374)'
+          links:
+          - name: Pull Request
+            url: https://github.com/CloudPirates-io/helm-charts/pull/1374
+      artifacthub.io/containsSecurityUpdates: "false"
+      artifacthub.io/links: |
+        - name: Redis
+          url: https://redis.io
+        - name: Helm Chart
+          url: https://github.com/CloudPirates-io/helm-charts/tree/main/charts/redis
+        - name: Application
+          url: https://github.com/redis/redis
+        - name: Maintainer CloudPirates
+          url: https://www.cloudpirates.io
+      artifacthub.io/signKey: |
+        fingerprint: 6917f1a88c122cbb1de5aa55457752135bdcf95a
+        url: https://raw.githubusercontent.com/CloudPirates-io/helm-charts/refs/heads/main/cosign.pub
+      license: Apache-2.0
+    apiVersion: v2
+    appVersion: 8.8.0
+    created: "2026-06-11T11:25:00.322000132Z"
+    dependencies:
+    - name: common
+      repository: oci://registry-1.docker.io/cloudpirates
+      version: 2.2.0
+    description: An open source, in-memory data structure store used as a database,
+      cache, and message broker.
+    digest: da82f755fc32348755a2b49adc29a0caca4c1b89abd90067073a9835dae98534
+    home: https://www.redis.io
+    icon: https://a.storyblok.com/f/143071/512x512/32c74816d1/redis-logo.svg
     keywords:
-    - ray
-    - ray operator
-    - distributed computing
-    - data processing
-    - machine learning
-    - deep learning
-    - hyperparameter tuning
-    - reinforcement learning
-    - model serving
-    name: kuberay-operator
+    - redis
+    - database
+    - cache
+    - in-memory
+    - key-value
+    - nosql
+    maintainers:
+    - email: hello@cloudpirates.io
+      name: CloudPirates GmbH & Co. KG
+      url: https://www.cloudpirates.io
+    name: redis
+    sources:
+    - https://github.com/CloudPirates-io/helm-charts/tree/main/charts/redis
+    - https://github.com/redis/redis
     type: application
     urls:
-    - https://cinebee111lagom.github.io/helmoci/kuberay-operator-1.6.1.tgz
-    version: 1.6.1
-  ray-cluster:
-  - apiVersion: v2
-    created: "2026-06-11T10:40:43.367526108Z"
-    description: A Helm chart for deploying the RayCluster with the kuberay operator.
-    digest: 8f5f39b1a75da196bcc9c9354b2041f70b21afcfed309121f59f21b924d81dc8
-    home: https://github.com/ray-project/kuberay
-    icon: https://github.com/ray-project/ray/raw/master/doc/source/images/ray_header_logo.png
-    name: ray-cluster
-    type: application
-    urls:
-    - https://cinebee111lagom.github.io/helmoci/ray-cluster-1.6.1.tgz
-    version: 1.6.1
-generated: "2026-06-11T10:40:43.358972503Z"
+    - https://cinebee111lagom.github.io/helmoci/redis-0.30.3.tgz
+    version: 0.30.3
+generated: "2026-06-11T11:25:00.319004158Z"
